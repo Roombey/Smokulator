@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     android:textColor="#C2C2C2"
-    android:textSize="18sp"
+    android:textSize="14sp"
     android:textAlignment="center"
     android:fontFamily="@font/comic">
 

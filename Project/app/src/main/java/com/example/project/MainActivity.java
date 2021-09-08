@@ -1,17 +1,23 @@
 package com.example.project;
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.Calendar;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,6 +27,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.database.SQLException;
@@ -48,10 +55,11 @@ public class MainActivity extends AppCompatActivity {
     Button knopkaMenu;
     Button shot;
     Button give;
+    ImageView imageView;
     TextView sig, lt;
     private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
-
+    private static final String MY_SETTINGS = "my_settings";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         mTitle = mDrawerTitle = getTitle();
         mScreenTitles = getResources().getStringArray(R.array.screen_array);
+
 
 
         mDBHelper = new DatabaseHelper(this);
@@ -81,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         give = (Button) findViewById(R.id.give);
         sig = findViewById(R.id.sig);
         lt = findViewById(R.id.lt);
+        imageView = findViewById(R.id.imageView);
         knopkaMenu = findViewById(R.id.knopkaMenu);
         String sigasT = null;
         Cursor cursorka1 = mDb.rawQuery("SELECT * FROM last", null);
@@ -376,6 +386,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent d = new Intent(MainActivity.this, CiggaActivity.class);
                 startActivity(d);
                 break;
+            case 154:
+                Intent e = new Intent(MainActivity.this, Journal.class);
+                startActivity(e);
+                break;
 
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -405,8 +419,15 @@ public class MainActivity extends AppCompatActivity {
      */
     void give(){
         give.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
+                SharedPreferences sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
+                int tak = sp.getInt("taken", 0);
+                tak++;
+                SharedPreferences.Editor e = sp.edit();
+                e.putInt("taken", tak);
+                e.commit();
                 String product = "";
                 Cursor cursor1 = mDb.rawQuery("UPDATE siger SET sigi = sigi+1   WHERE id = '1'", null);
                 cursor1.moveToFirst();
@@ -490,6 +511,15 @@ public class MainActivity extends AppCompatActivity {
                 Date currentDate = new Date();
                 DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                 String timeText = timeFormat.format(currentDate);
+                ContentValues ca = new ContentValues();
+                ca.put("Name", "Чужая");
+                ca.put("Own", "2");
+
+                ca.put("Time", ""+ timeText + "");
+                LocalDate d2 = LocalDate.now();
+                String d1 = d2.toString();
+                ca.put("Date", ""+d1+"");
+                mDb.insert("Diary", null, ca);
                 String product1212 = "";
                 Cursor cursor1212 = mDb.rawQuery("UPDATE Last SET times = '"+timeText+"' WHERE id = '1'", null);
                 cursor1212.moveToFirst();
@@ -521,6 +551,7 @@ public class MainActivity extends AppCompatActivity {
     void shot() {
 
         shot.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 int l = 0;
@@ -542,6 +573,33 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 if (b > 0){
+                    SharedPreferences sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
+                    float gig = sp.getFloat("given", 0);
+                    gig++;
+                    SharedPreferences.Editor e = sp.edit();
+                    e.putFloat("given", gig);
+                    e.commit();
+                    Date currentDate = new Date();
+                    DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                    String timeText = timeFormat.format(currentDate);
+                    ContentValues ce = new ContentValues();
+                    String n = "";
+                    Cursor cursors = mDb.rawQuery("Select Name From Cigga Where Activ = '1'", null);
+                    cursors.moveToFirst();
+                    while (!cursors.isAfterLast()) {
+                        Log.d("Tagg","Выполняется");
+                        n += cursors.getString(0) ;
+                        cursors.moveToNext();
+                    }
+                    cursors.close();
+                    ce.put("Name", ""+n+"");
+                    ce.put("Own", "0");
+
+                    ce.put("Time", ""+ timeText + "");
+                    LocalDate d2 = LocalDate.now();
+                    String d1 = d2.toString();
+                    ce.put("Date", ""+d1+"");
+                    mDb.insert("Diary", null, ce);
                     String product = "";
                     Cursor cursor1 = mDb.rawQuery("UPDATE Cigga SET sig = sig-1   WHERE Activ = 1", null);
                     cursor1.moveToFirst();
@@ -551,6 +609,7 @@ public class MainActivity extends AppCompatActivity {
                         cursor1.moveToNext();
                     }
                     cursor1.close();
+
                     double vv = ' ';
                     Cursor cursord9 = mDb.rawQuery("SELECT * FROM Cigga Where Activ = 1", null);
                     cursord9.moveToFirst();
@@ -636,6 +695,7 @@ public class MainActivity extends AppCompatActivity {
     }
     void knopk(){
         knopka.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 int l = 0;
@@ -661,6 +721,24 @@ public class MainActivity extends AppCompatActivity {
                     Date currentDate = new Date();
                     DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                     String timeText = timeFormat.format(currentDate);
+                    ContentValues cd = new ContentValues();
+                    String n = "";
+                    Cursor cursors = mDb.rawQuery("Select Name From Cigga Where Activ = '1'", null);
+                    cursors.moveToFirst();
+                    while (!cursors.isAfterLast()) {
+                        Log.d("Tagg","Выполняется");
+                        n += cursors.getString(0) ;
+                        cursors.moveToNext();
+                    }
+                    cursors.close();
+                    cd.put("Name", ""+ n + "");
+                    cd.put("Own", "1");
+
+                    cd.put("Time", ""+ timeText + "");
+                    LocalDate d2 = LocalDate.now();
+                    String d1 = d2.toString();
+                    cd.put("Date", ""+d1+"");
+                    mDb.insert("Diary", null, cd);
                     String product1212 = "";
                     Cursor cursor1212 = mDb.rawQuery("UPDATE Last SET times = '"+timeText+"' WHERE id = '1'", null);
                     cursor1212.moveToFirst();

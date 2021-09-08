@@ -132,6 +132,10 @@ public class CashActivity extends AppCompatActivity{
                 Intent d = new Intent(CashActivity.this, CiggaActivity.class);
                 startActivity(d);
                 break;
+            case 154:
+                Intent e = new Intent(CashActivity.this, Journal.class);
+                startActivity(e);
+                break;
 
         }
         super.onActivityResult(requestCode, resultCode, data);

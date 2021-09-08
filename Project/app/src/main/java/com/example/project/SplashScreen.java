@@ -49,8 +49,7 @@ public class SplashScreen extends AppCompatActivity {
         } catch (SQLException mSQLException) {
             throw mSQLException;
         }
-        SharedPreferences sp = getSharedPreferences(MY_SETTINGS,
-                Context.MODE_PRIVATE);
+        SharedPreferences sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
         boolean hasVisited = sp.getBoolean("hasVisited", false);
         if (!hasVisited) {
             LocalDate d1 = LocalDate.now();

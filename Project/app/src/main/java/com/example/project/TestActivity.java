@@ -24,6 +24,7 @@ public class TestActivity extends AppCompatActivity {
     Button home;
     Button cig;
     Button reset;
+    Button journal;
     private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
     private static final String MY_SETTINGS = "my_settings";
@@ -36,6 +37,7 @@ public class TestActivity extends AppCompatActivity {
         home = findViewById(R.id.btnHome);
         cig = findViewById(R.id.btnCig);
         reset = findViewById(R.id.resetall);
+        journal = findViewById(R.id.jou);
         mDBHelper = new DatabaseHelper(this);
         try {
             mDBHelper.updateDataBase();
@@ -70,6 +72,7 @@ public class TestActivity extends AppCompatActivity {
                                 for(int i = 1; i <= l; i++){
                                     mDb.execSQL("Delete From Cigga Where ID = "+i);
                                 }
+                                mDb.execSQL("Delete From Diary Where Own != '2'");
                                 mDb.execSQL("UPDATE money SET today = 0, week = 0, mounth = 0, year = 0, alltime = 0 Where id = 1");
                                 mDb.execSQL("UPDATE siger SET sigi = 0 Where id = 1");
                                 mDb.execSQL("UPDATE sigertoday SET sigitoday = 0 Where id = 1");
@@ -80,6 +83,10 @@ public class TestActivity extends AppCompatActivity {
                                         Context.MODE_PRIVATE);
                                 SharedPreferences.Editor e = sp.edit();
                                 e.putBoolean("hasVisited", false);
+                                e.commit();
+                                e.putInt("taken", 0);
+                                e.commit();
+                                e.putFloat("given", 0);
                                 e.commit();
                                 Toast toast = Toast.makeText(getApplicationContext(),
                                         "Статистика сброшена", Toast.LENGTH_SHORT);
@@ -127,6 +134,15 @@ public class TestActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.putExtra("btnCode","BTN_START_poslednee");
                 setResult(153, intent);
+                finish();
+            }
+        });
+        journal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra("btnCode","BTN_START_pyatoe");
+                setResult(154, intent);
                 finish();
             }
         });

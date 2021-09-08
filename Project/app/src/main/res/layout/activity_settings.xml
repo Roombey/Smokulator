@@ -7,62 +7,6 @@
     android:background="@drawable/stat"
     tools:context=".SettingsActivity">
 
-    <TextView
-        android:id="@+id/textstaj"
-        android:layout_width="94dp"
-        android:layout_height="39dp"
-        android:fontFamily="@font/baumans"
-        android:textColor="#C2C2C2"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.94"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.393" />
-
-    <TextView
-        android:id="@+id/textdita"
-        android:layout_width="98dp"
-        android:layout_height="41dp"
-        android:fontFamily="@font/baumans"
-        android:textColor="#c2c2c2"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.952"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.731" />
-
-    <TextView
-        android:id="@+id/textkd"
-        android:layout_width="97dp"
-        android:layout_height="48dp"
-        android:fontFamily="@font/baumans"
-        android:textColor="#c2c2c2"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.949"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.918" />
-
-    <TextView
-        android:id="@+id/Textnum"
-        android:layout_width="97dp"
-        android:layout_height="41dp"
-        android:fontFamily="@font/baumans"
-        android:textColor="#C2C2C2"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.952"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.566" />
-
     <Button
         android:id="@+id/menu1"
         android:layout_width="62dp"
@@ -74,5 +18,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.023" />
+
+    <ListView
+        android:id="@+id/staticus"
+        android:layout_width="245dp"
+        android:layout_height="400dp"
+        android:clickable="false"
+        android:divider="@null"
+        android:listSelector="@color/black_700"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.186"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.703" />
+
+    <ListView
+        android:id="@+id/staticus2"
+        android:layout_width="70dp"
+        android:layout_height="400dp"
+        android:clickable="false"
+        android:divider="@null"
+        android:listSelector="@color/black_700"
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/staticus"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.703" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

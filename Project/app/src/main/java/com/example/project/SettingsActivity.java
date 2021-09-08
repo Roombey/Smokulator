@@ -3,14 +3,19 @@ package com.example.project;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.audiofx.BassBoost;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -18,11 +23,16 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class SettingsActivity extends AppCompatActivity {
+    private ArrayAdapter<String> mAdapter;
     TextView num;
     TextView dita;
     TextView staj;
     TextView kd;
     Button back;
+    ListView staticus;
+    ListView staticus2;
+    private static final String MY_SETTINGS = "my_settings";
+
     private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
     @Override
@@ -40,10 +50,11 @@ public class SettingsActivity extends AppCompatActivity {
         } catch (SQLException mSQLException) {
             throw mSQLException;
         }
-        num = findViewById(R.id.Textnum);
-        dita = findViewById(R.id.textdita);
-        staj = findViewById(R.id.textstaj);
-        kd = findViewById(R.id.textkd);
+        SharedPreferences sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
+        int gig = (int)sp.getFloat("given", 0);
+        int tak = sp.getInt("taken", 0);
+        staticus = findViewById(R.id.staticus);
+        staticus2 = findViewById(R.id.staticus2);
         back = findViewById(R.id.menu1);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,29 +63,13 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         });
-
-
-        String product8 = "";
-        Cursor cursorl2 = mDb.rawQuery("SELECT * FROM time", null);
-        cursorl2.moveToFirst();
-        while (!cursorl2.isAfterLast()) {
-            Log.d("Tagg","Выполняется");
-            product8 += cursorl2.getInt(1) ;
-            cursorl2.moveToNext();
-        }
-        staj.setText(product8);
-        String product5 = "";
-
-        String l = "";
-        Cursor cursorl = mDb.rawQuery("SELECT * FROM sigertoday", null);
-        cursorl.moveToFirst();
-        while (!cursorl.isAfterLast()) {
-            Log.d("Tagg","Выполняется");
-            l += cursorl.getInt(1) ;
-            cursorl.moveToNext();
-        }
-        cursorl.close();
-        dita.setText(l);
+        String[] kek = new String[5];
+        kek[0] = "Сигарет выкурено: ";
+        kek[1] = "Выкурено сегодня: ";
+        kek[2] = "Ср. сигарет в день: ";
+        kek[3] = "Отдано сигарет: ";
+        kek[4] = "Выкурено чужих сигарет: ";
+        String[] kekl = new String[5];
         String product = "";
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM siger", null);
@@ -85,23 +80,17 @@ public class SettingsActivity extends AppCompatActivity {
             cursor.moveToNext();
         }
         cursor.close();
-        num.setText(product);
-        double v= ' ';
-        Cursor cursord9 = mDb.rawQuery("SELECT * FROM time", null);
-        cursord9.moveToFirst();
-        while (!cursord9.isAfterLast()) {
+        kekl[0] =product;
+        String l = "";
+        Cursor cursorl = mDb.rawQuery("SELECT * FROM sigertoday", null);
+        cursorl.moveToFirst();
+        while (!cursorl.isAfterLast()) {
             Log.d("Tagg","Выполняется");
-            v = cursord9.getDouble(1) ;
-            cursord9.moveToNext();
+            l += cursorl.getInt(1) ;
+            cursorl.moveToNext();
         }
-        double vz= ' ';
-        Cursor cursord91 = mDb.rawQuery("SELECT * FROM siger", null);
-        cursord91.moveToFirst();
-        while (!cursord91.isAfterLast()) {
-            Log.d("Tagg","Выполняется");
-            vz = cursord91.getDouble(0) ;
-            cursord91.moveToNext();
-        }
+        cursorl.close();
+        kekl[1] =l;
 
         String product13 = "";
         Cursor cursor13 = mDb.rawQuery("SELECT * FROM sigiday", null);
@@ -113,7 +102,16 @@ public class SettingsActivity extends AppCompatActivity {
         }
         cursor13.close();
 
-        kd.setText(product13);
+        kekl[2] =product13;
+        kekl[3] = Integer.toString(gig);
+        kekl[4] = Integer.toString(tak);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item_1, kek);
+        staticus.setAdapter(adapter);
+        staticus.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        ArrayAdapter<String> adapterl = new ArrayAdapter<>(this, R.layout.list_item_1, kekl);
+        staticus2.setAdapter(adapterl);
+        staticus2.setOverScrollMode(View.OVER_SCROLL_NEVER);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -134,6 +132,10 @@ public class SettingsActivity extends AppCompatActivity {
             case 153:
                 Intent d = new Intent(SettingsActivity.this, CiggaActivity.class);
                 startActivity(d);
+                break;
+            case 154:
+                Intent e = new Intent(SettingsActivity.this, Journal.class);
+                startActivity(e);
                 break;
 
         }

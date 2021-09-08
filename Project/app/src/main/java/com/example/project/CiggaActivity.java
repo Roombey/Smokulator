@@ -27,6 +27,7 @@ public class CiggaActivity extends AppCompatActivity {
     Button renew;
     TextView tv1, tv2, tv3, tv4;
     DatabaseHelper mDBHelper;
+    boolean lol = false;
     SQLiteDatabase mDb;
 
     @Override
@@ -52,6 +53,37 @@ public class CiggaActivity extends AppCompatActivity {
             throw new Error("UnableToUpdateDatabase");
         }
         mDb = mDBHelper.getWritableDatabase();
+        AlertDialog.Builder builder = new AlertDialog.Builder(CiggaActivity.this);
+        View inputEditTextField = etee;
+
+        builder.setMessage("Изменение количества сигарет:")
+                .setView(inputEditTextField)
+                .setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                })
+                .setNeutralButton("Добавить 20 сигарет", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mDb.execSQL("UPDATE Cigga Set sig = sig + 20 Where Activ = 1");
+//                        Intent intent = new Intent(CiggaActivity.this, CiggaActivity.class);
+//                        startActivityForResult(intent, 1);
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "Добавлено 20 сигарет", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                })
+                .setPositiveButton("Изменить", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String editTextInput = ((EditText) inputEditTextField).getText().toString();
+                        mDb.execSQL("UPDATE Cigga Set sig = " + editTextInput + " Where Activ = 1");
+//                        Intent intent = new Intent(CiggaActivity.this, CiggaActivity.class);
+//                        startActivityForResult(intent, 1);
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "Количество сигарет изменено", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                });
         renew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,40 +95,8 @@ public class CiggaActivity extends AppCompatActivity {
                     l = cursork.getInt(0) ;
                     cursork.moveToNext();
                 }
+
                 if(l == 1) {
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(CiggaActivity.this);
-                    View inputEditTextField = etee;
-
-                    builder.setMessage("Изменение количества сигарет:")
-                            .setView(inputEditTextField)
-                            .setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .setNeutralButton("Добавить 20 сигарет", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    mDb.execSQL("UPDATE Cigga Set sig = sig + 20 Where Activ = 1");
-                                    Intent intent = new Intent(CiggaActivity.this, CiggaActivity.class);
-                                    startActivityForResult(intent, 1);
-                                    Toast toast = Toast.makeText(getApplicationContext(),
-                                            "Добавлено 20 сигарет", Toast.LENGTH_SHORT);
-                                    toast.show();
-                                }
-                            })
-                            .setPositiveButton("Изменить", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            String editTextInput = ((EditText) inputEditTextField).getText().toString();
-                                            mDb.execSQL("UPDATE Cigga Set sig = " + editTextInput + " Where Activ = 1");
-                                            Intent intent = new Intent(CiggaActivity.this, CiggaActivity.class);
-                                            startActivityForResult(intent, 1);
-                                            Toast toast = Toast.makeText(getApplicationContext(),
-                                                    "Количество сигарет изменено", Toast.LENGTH_SHORT);
-                                            toast.show();
-                                        }
-                                    });
-
                     builder.show();
 
                 String sig = "";
@@ -205,6 +205,10 @@ public class CiggaActivity extends AppCompatActivity {
             case 153:
                 Intent d = new Intent(CiggaActivity.this, CiggaActivity.class);
                 startActivity(d);
+                break;
+            case 154:
+                Intent e = new Intent(CiggaActivity.this, Journal.class);
+                startActivity(e);
                 break;
 
         }

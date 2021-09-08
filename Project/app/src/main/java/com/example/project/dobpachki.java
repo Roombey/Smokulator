@@ -52,36 +52,52 @@ TextInputEditText pricep;
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int l = 0;
-                Cursor cursork = mDb.rawQuery("Select Count(*) From Cigga", null);
-                cursork.moveToFirst();
-                while (!cursork.isAfterLast()) {
-                    Log.d("Tagg","Выполняется");
-                    l = cursork.getInt(0) ;
-                    cursork.moveToNext();
-                }
-                String n = namep.getText().toString();
-                String p = pricep.getText().toString();
-                double p1 = Double.parseDouble(p);
-                ContentValues cv = new ContentValues();
-                cv.put("ID",l+1);
-                cv.put("Name", ""+n+"");
-                cv.put("Price",""+p1+"");
-                if(l == 0) {
-                    cv.put("Activ", "1");
-                }
-                else{
-                    cv.put("Activ", "0");
-                }
-                cv.put("sig", "20");
-                cv.put("odna", p1/20);
-                mDb.insert("Cigga", null, cv);
+                if (namep.length() != 0 & pricep.length() != 0) {
+                    int l = 0;
+                    Cursor cursork = mDb.rawQuery("Select Count(*) From Cigga", null);
+                    cursork.moveToFirst();
+                    while (!cursork.isAfterLast()) {
+                        Log.d("Tagg", "Выполняется");
+                        l = cursork.getInt(0);
+                        cursork.moveToNext();
+                    }
+                    String n = namep.getText().toString();
+                    String p = pricep.getText().toString();
+                    double p1 = Double.parseDouble(p);
+                    ContentValues cv = new ContentValues();
+                    cv.put("ID", l + 1);
+                    cv.put("Name", "" + n + "");
+                    cv.put("Price", "" + p1 + "");
+                    if (l == 0) {
+                        cv.put("Activ", "1");
+                    } else {
+                        cv.put("Activ", "0");
+                    }
+                    cv.put("sig", "20");
+                    cv.put("odna", p1 / 20);
+                    mDb.insert("Cigga", null, cv);
 
-                  Intent intent = new Intent(dobpachki.this, CiggaActivity.class);
-                  startActivityForResult(intent, 1);
-                Toast toast = Toast.makeText(getApplicationContext(),
-                        "Новая пачка добавлена", Toast.LENGTH_SHORT);
-                toast.show();
+                    Intent intent = new Intent(dobpachki.this, CiggaActivity.class);
+                    startActivityForResult(intent, 1);
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Новая пачка добавлена", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                if (namep.length() == 0 & pricep.length()!=0){
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Не указано название сигарет", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                if (namep.length() != 0 & pricep.length()==0){
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Не указана стоимость сигарет", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                if (namep.length() == 0 & pricep.length()==0){
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Не указано название сигарет и их стоимость", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
 
